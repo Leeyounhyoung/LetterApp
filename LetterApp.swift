@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct LetterAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+struct LetterApp: App {
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }
