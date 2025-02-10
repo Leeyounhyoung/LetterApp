@@ -18,13 +18,13 @@ struct CustomTextEditorView: UIViewRepresentable {
     
     // 줄 간격 및 문단 스타일 설정
     let style = NSMutableParagraphStyle()
-    style.lineSpacing = 9.5
-    style.paragraphSpacingBefore = 0
+    style.lineSpacing = AppTheme.letterLineSpacing
+    style.paragraphSpacingBefore = AppTheme.letterParagraphSpacing
     
     // 줄 간격 설정 적용 및 폰트 적용
     textView.typingAttributes = [
       .paragraphStyle: style,
-      .font: UIFont.systemFont(ofSize: 18)
+      .font: UIFont.systemFont(ofSize: AppTheme.letterFontSize)
     ]
     
     return textView
@@ -77,11 +77,9 @@ struct CustomTextEditorView: UIViewRepresentable {
       textStorage.addLayoutManager(layoutManager)
       
       // NSTextStorage에 폰트 속성을 추가하여, 텍스트의 폰트를 지정
-      textStorage.addAttribute(.font, value: textView.font ?? UIFont.systemFont(ofSize: 18), range: NSRange(location: 0, length: textStorage.length))
+      textStorage.addAttribute(.font, value: textView.font ?? UIFont.systemFont(ofSize: AppTheme.letterFontSize), range: NSRange(location: 0, length: textStorage.length))
       
       let totalLines = layoutManager.numberOfLines()
-      
-      print("현재 줄 수: \(totalLines), 최대 줄 수: \(parent.lineCount)")
       
       // 마지막 줄일때 개행문자의 입력을 막음
       if totalLines == parent.lineCount && text == "\n" {
