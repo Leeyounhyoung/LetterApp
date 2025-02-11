@@ -32,7 +32,9 @@ struct CustomTextEditorView: UIViewRepresentable {
   
   // 기존 UIView를 업데이트 상태가 변할 때 호출
   func updateUIView(_ uiView: UITextView, context: Context) {
-    uiView.text = text
+    //let selectedRange = uiView.selectedRange  // 현재 커서 위치 저장
+    uiView.text = text  // 텍스트 업데이트
+    //uiView.selectedRange = selectedRange  // 원래 커서 위치로 복원
   }
   
   // Coordinator 생성
@@ -48,11 +50,7 @@ struct CustomTextEditorView: UIViewRepresentable {
       self.parent = parent
     }
     
-    // 텍스트 뷰가 입력된 후 들어오는 함수
-    func textViewDidChange(_ textView: UITextView) {
-      parent.text = textView.text
-    }
-    
+
     // 텍스트가 입력되기 전에 텍스트가 범위를 넘어간지 판별하고 그 결과 값을 반환
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
       
@@ -81,9 +79,18 @@ struct CustomTextEditorView: UIViewRepresentable {
       
       let totalLines = layoutManager.numberOfLines()
       
+      
       // 마지막 줄일때 개행문자의 입력을 막음
-      if totalLines == parent.lineCount && text == "\n" {
-        return false
+      if text == "\n" {
+        // 마지막 줄 마지막 글자에서 엔터를 막음
+        if totalLines == parent.lineCount && newText.count == range.location+1 {
+          return false
+        }
+        
+        // 현재 줄 수가 최대 줄수를 넘어가면 입력을 막음
+        if totalLines > parent.lineCount{
+          return false
+        }
       }
       
       // 편지지를 넘어가지 않도록 막음
